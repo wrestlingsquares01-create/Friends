@@ -1,0 +1,1364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff5f8">
+  <title>PIP! — a tiny place to talk</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #fff8f1;
+      --paper: #fffdfb;
+      --pink: #ff4f93;
+      --lightpink: #ffe2ee;
+      --ink: #33233c;
+      --lavender: #b6a1fa;
+      --lime: #d7fc8b;
+      --line: #f0c9d7;
+      --soft: #836c83;
+      --vh: 100dvh;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+    }
+
+    body {
+      background: #e9d6e7;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid #8157ce;
+      outline-offset: 3px;
+    }
+
+    [hidden] { display: none !important; }
+
+    .desktop-decor {
+      position: fixed;
+      left: max(3vw, 20px);
+      top: 20%;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      color: #8b5482;
+      font-size: clamp(38px, 5vw, 100px);
+      line-height: .96;
+      transform: rotate(-9deg);
+      pointer-events: none;
+    }
+
+    .desktop-decor small {
+      display: block;
+      margin-top: 25px;
+      font: 700 13px 'DM Sans', sans-serif;
+      letter-spacing: 3px;
+      color: #a0789d;
+    }
+
+    .desktop-decor.right {
+      left: auto;
+      right: 5%;
+      top: 62%;
+      font-size: 50px;
+      transform: rotate(13deg);
+      color: #ad8bc4;
+    }
+
+    .phone {
+      width: min(100%, 460px);
+      height: min(920px, var(--vh));
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+      box-shadow: 0 28px 100px #55305740;
+    }
+
+    .screen {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      position: relative;
+    }
+
+    /* WELCOME */
+
+    .welcome {
+      overflow-y: auto;
+      background: radial-gradient(
+        circle at 95% 20%,
+        #fff 0,
+        #fff8f1 43%
+      );
+    }
+
+    .wel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 25px 6px;
+    }
+
+    .logo {
+      font: 700 33px 'Fredoka', sans-serif;
+      letter-spacing: -2px;
+      color: var(--ink);
+    }
+
+    .logo span { color: var(--pink); }
+
+    .tiny-pill {
+      border: 1.5px solid var(--ink);
+      background: var(--lime);
+      border-radius: 100px;
+      padding: 8px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      transform: rotate(5deg);
+    }
+
+    .welcome-copy {
+      position: relative;
+      padding: 25px 25px 0;
+      z-index: 2;
+    }
+
+    .hello {
+      font: 700 27px 'Caveat', cursive;
+      color: #a24d82;
+      transform: rotate(-4deg);
+      display: inline-block;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    .hero-title {
+      font: 700 clamp(66px, 17vw, 89px)/.89 'Fredoka', sans-serif;
+      letter-spacing: -5px;
+      margin: 13px 0;
+    }
+
+    .hero-title span {
+      display: block;
+      color: var(--pink);
+    }
+
+    .hero-title .last {
+      color: var(--ink);
+      display: inline;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      line-height: 1.75;
+      color: #786678;
+      max-width: 275px;
+      font-weight: 600;
+    }
+
+    /* SCRAPBOOK SCENE */
+
+    .collage {
+      height: 286px;
+      position: relative;
+      margin-top: -3px;
+      perspective: 900px;
+    }
+
+    .shape {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 20px 45px #71416322;
+      transition: transform .4s ease;
+    }
+
+    .blob {
+      width: 220px;
+      height: 220px;
+      left: 50%;
+      top: 30px;
+      transform: translateX(-50%) rotate(-14deg);
+      background: #f5b4ce;
+      border: 3px solid #39223f;
+      border-radius: 42% 58% 43% 57% / 60% 40% 60% 40%;
+      box-shadow: 10px 14px 0 #c99ac0;
+      animation: wobble 5s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      50% {
+        border-radius: 60% 40% 58% 42% / 42% 60% 40% 58%;
+        transform: translateX(-50%) rotate(-8deg);
+      }
+    }
+
+    .polaroid {
+      width: 153px;
+      height: 171px;
+      top: 49px;
+      left: 31%;
+      transform: rotate(11deg) translateZ(30px);
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      padding: 10px 10px 32px;
+      box-shadow: 9px 12px 0 #76517555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .polaroid-inner {
+      height: 113px;
+      width: 100%;
+      background: linear-gradient(135deg, #c0e3fe, #fce9b7);
+      border-radius: 3px;
+      display: grid;
+      place-items: center;
+      font-size: 58px;
+    }
+
+    .polaroid small {
+      position: absolute;
+      bottom: 8px;
+      font: 700 20px 'Caveat', cursive;
+    }
+
+    .sticker {
+      position: absolute;
+      border: 2px solid var(--ink);
+      font: 700 15px 'Fredoka', sans-serif;
+      box-shadow: 4px 5px 0 var(--ink);
+    }
+
+    .sticker.smile {
+      right: 16px;
+      top: 24px;
+      background: var(--lime);
+      padding: 15px;
+      border-radius: 50%;
+      font-size: 27px;
+      transform: rotate(17deg);
+    }
+
+    .sticker.hey {
+      left: 10px;
+      bottom: 29px;
+      background: var(--lavender);
+      border-radius: 20px;
+      padding: 12px 16px;
+      transform: rotate(-11deg);
+    }
+
+    .sticker.sparkle {
+      right: 28px;
+      bottom: 18px;
+      border: 0;
+      box-shadow: none;
+      font-size: 44px;
+      color: #ff6fa9;
+      transform: rotate(18deg);
+    }
+
+    .welcome-bottom {
+      padding: 0 25px 24px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .button-main {
+      width: 100%;
+      background: var(--ink);
+      color: white;
+      border: 2px solid var(--ink);
+      border-radius: 20px;
+      padding: 16px 20px;
+      font: 700 17px 'Fredoka', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 5px 6px 0 #ff93bf;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .button-main:active {
+      transform: translate(4px, 4px);
+      box-shadow: 1px 2px 0 #ff93bf;
+    }
+
+    .welcome-foot {
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: #a28da1;
+      margin: 18px 0 0;
+      font-weight: 800;
+    }
+
+    /* NAME ENTRY */
+
+    .gate {
+      overflow-y: auto;
+      padding: 30px 25px;
+      background: linear-gradient(160deg, #fff6f9, #ffe6f0);
+    }
+
+    .back-link {
+      background: transparent;
+      border: 0;
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 7px 0;
+    }
+
+    .gate-sticker {
+      height: 180px;
+      display: grid;
+      place-items: center;
+    }
+
+    .gate-sticker .envelope {
+      height: 125px;
+      width: 178px;
+      border: 3px solid var(--ink);
+      background: #e7d4ff;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 65px;
+      box-shadow: 9px 11px 0 #c9afe8;
+      transform: rotate(-10deg);
+    }
+
+    .gate h2 {
+      font: 700 53px/.97 'Fredoka', sans-serif;
+      letter-spacing: -2px;
+      margin: 8px 0 12px;
+    }
+
+    .gate h2 span { color: var(--pink); }
+
+    .muted {
+      color: #826b80;
+      font-size: 13px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .label {
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 1px;
+      display: block;
+      margin: 28px 0 9px;
+    }
+
+    .field {
+      background: #fff;
+      border: 2px solid #e4bcd1;
+      border-radius: 18px;
+      width: 100%;
+      padding: 16px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .field::placeholder { color: #b69bac; }
+
+    .gate .button-main {
+      margin-top: 14px;
+      background: var(--pink);
+    }
+
+    .error {
+      color: #a22853;
+      font-size: 12px;
+      font-weight: 700;
+      min-height: 18px;
+      margin-top: 12px;
+    }
+
+    .fine {
+      font-size: 11px;
+      line-height: 1.55;
+      color: #967d91;
+      margin-top: 24px;
+    }
+
+    /* MAIN MOBILE APP */
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      background: #fff9f5;
+      overflow: hidden;
+    }
+
+    .app-top {
+      height: 73px;
+      min-height: 73px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fffdfc;
+      border-bottom: 2px solid #f9dbe6;
+    }
+
+    .app-top .logo { font-size: 29px; }
+
+    .online-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      color: #8e6888;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .online-label i {
+      height: 7px;
+      width: 7px;
+      background: #91d361;
+      border-radius: 50%;
+    }
+
+    .person-tag {
+      font: 700 13px 'Fredoka', sans-serif;
+      background: var(--lime);
+      border: 2px solid var(--ink);
+      padding: 8px 12px;
+      border-radius: 13px;
+      white-space: nowrap;
+    }
+
+    .main-area {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .pane {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+    }
+
+    .pane.active { display: flex; }
+
+    /* CHAT */
+
+    .chat-heading {
+      padding: 14px 20px 15px;
+      background: #fff0f6;
+      flex-shrink: 0;
+      border-bottom: 1px dashed #eabbd0;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stack-avatars {
+      display: flex;
+      padding-left: 2px;
+    }
+
+    .avatar {
+      height: 38px;
+      width: 38px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font: 700 19px 'Fredoka';
+      margin-left: -3px;
+      background: #ff87b6;
+    }
+
+    .avatar.alt { background: #beadfb; }
+
+    .chat-heading h2 {
+      font: 700 19px 'Fredoka';
+      margin: 0;
+    }
+
+    .chat-heading p {
+      font-size: 10px;
+      margin: 4px 0 0;
+      color: #a16e8e;
+      font-weight: 700;
+    }
+
+    .chat-scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 16px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+
+    .day-label {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #aa7b98;
+      padding: 4px 0;
+    }
+
+    .system-message {
+      max-width: 91%;
+      align-self: center;
+      background: #fff;
+      border: 1px dashed #e7bad0;
+      border-radius: 17px;
+      padding: 12px 15px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #806a7f;
+    }
+
+    .bubble {
+      align-self: flex-end;
+      background: #fcaad0;
+      padding: 12px 14px;
+      max-width: 85%;
+      border-radius: 18px 18px 5px 18px;
+      box-shadow: 3px 4px 0 #de7da9;
+      word-break: break-word;
+    }
+
+    .bubble .who {
+      font-size: 10px;
+      color: #7d385d;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .bubble .body {
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .bubble small {
+      display: block;
+      text-align: right;
+      font-size: 9px;
+      color: #7e5270;
+      margin-top: 7px;
+      font-weight: 700;
+    }
+
+    .composer {
+      display: flex;
+      flex-shrink: 0;
+      min-width: 0;
+      gap: 9px;
+      padding: 12px 13px max(12px, env(safe-area-inset-bottom));
+      background: #fff;
+      border-top: 2px solid #f2cbdc;
+    }
+
+    .composer input {
+      flex: 1;
+      min-width: 0;
+      background: #fff4f8;
+      border: 1.5px solid #e9bbd1;
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 16px;
+      color: var(--ink);
+    }
+
+    .send {
+      flex-shrink: 0;
+      background: var(--ink);
+      color: #fff;
+      border: 0;
+      border-radius: 15px;
+      width: 47px;
+      font-size: 22px;
+    }
+
+    /* BOTTOM NAV */
+
+    .tabbar {
+      height: 70px;
+      min-height: 70px;
+      display: flex;
+      background: #fff;
+      border-top: 1px solid #eed0dd;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .tab {
+      background: transparent;
+      border: 0;
+      color: #a08b9d;
+      font: 700 11px 'Fredoka';
+      min-width: 70px;
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .tab span {
+      font-size: 21px;
+      line-height: 1.1;
+    }
+
+    .tab.active { color: #e73c84; }
+    .tab.active span { transform: translateY(-2px); }
+
+    /* PINBOARD */
+
+    .board-scroll,
+    .info-scroll {
+      overflow-y: auto;
+      padding: 24px 20px 40px;
+      min-height: 0;
+    }
+
+    .section-eyebrow {
+      font: 700 23px 'Caveat';
+      color: #c05b93;
+      transform: rotate(-3deg);
+      display: inline-block;
+    }
+
+    .board-title {
+      font: 700 44px/.98 'Fredoka';
+      letter-spacing: -2px;
+      margin: 8px 0;
+    }
+
+    .board-title em {
+      font-style: normal;
+      color: var(--pink);
+    }
+
+    .board-desc {
+      color: #876e84;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .paper-card {
+      position: relative;
+      margin-top: 26px;
+      padding: 24px;
+      background: #fff;
+      border: 2px solid #3b293c;
+      border-radius: 16px;
+      box-shadow: 6px 7px 0 #dec5d7;
+    }
+
+    .paper-card:before {
+      content: '';
+      position: absolute;
+      width: 68px;
+      height: 17px;
+      left: 38%;
+      top: -10px;
+      background: #cdbdff99;
+      transform: rotate(-5deg);
+    }
+
+    .paper-card h3 {
+      font: 700 24px 'Fredoka';
+      margin-bottom: 11px;
+    }
+
+    .paper-card p {
+      font-size: 12px;
+      color: #866e82;
+      line-height: 1.65;
+    }
+
+    .pic-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 11px;
+      margin-top: 16px;
+    }
+
+    .pic {
+      aspect-ratio: 1;
+      min-width: 0;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #ffd1e2, #dbcaff);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid #e6b5cb;
+      color: #784c73;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mini-btn {
+      background: var(--lime);
+      border: 2px solid var(--ink);
+      border-radius: 13px;
+      padding: 12px 14px;
+      font: 700 13px 'Fredoka';
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .note-input {
+      width: 100%;
+      border: 1.5px solid #e7c7d6;
+      border-radius: 13px;
+      padding: 12px;
+      resize: vertical;
+      min-height: 78px;
+      background: #fff8fa;
+      color: var(--ink);
+    }
+
+    .note-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .note {
+      padding: 15px;
+      background: #fff0ac;
+      border-radius: 11px;
+      box-shadow: 2px 4px 0 #e4c985;
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    /* ABOUT */
+
+    .info-badge {
+      display: inline-block;
+      background: var(--lime);
+      padding: 8px 13px;
+      border: 2px solid var(--ink);
+      border-radius: 40px;
+      font: 700 12px 'Fredoka';
+      transform: rotate(-4deg);
+      margin-bottom: 18px;
+    }
+
+    .info-title {
+      font: 700 48px/.95 'Fredoka';
+      letter-spacing: -2px;
+    }
+
+    .info-title em {
+      color: var(--pink);
+      font-style: normal;
+    }
+
+    .info-list {
+      padding: 0;
+      margin: 20px 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .info-list li {
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid #e9c8d6;
+      border-radius: 15px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .toast {
+      position: absolute;
+      bottom: 90px;
+      left: 20px;
+      right: 20px;
+      border-radius: 16px;
+      color: #fff;
+      background: var(--ink);
+      padding: 15px 18px;
+      z-index: 50;
+      font-size: 12px;
+      box-shadow: 0 8px 25px #36233c30;
+      text-align: center;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 520px) {
+      body {
+        display: block;
+        background: var(--cream);
+      }
+
+      .phone {
+        width: 100%;
+        height: var(--vh);
+        box-shadow: none;
+      }
+
+      .desktop-decor { display: none; }
+    }
+
+    @media (max-height: 700px) {
+      .collage { height: 225px; }
+      .blob { width: 180px; height: 180px; }
+      .polaroid {
+        top: 31px;
+        width: 130px;
+        height: 153px;
+      }
+      .polaroid-inner { height: 92px; }
+      .hero-title { font-size: 65px; }
+      .welcome-copy { padding-top: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *:before, *:after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="desktop-decor" aria-hidden="true">
+    not a<br>dashboard.
+    <small>JUST GOOD CONVERSATIONS.</small>
+  </div>
+
+  <div class="desktop-decor right" aria-hidden="true">
+    ✿ ✧
+  </div>
+
+  <div class="phone" id="phone">
+
+    <!-- WELCOME -->
+    <section class="screen welcome" id="welcome">
+      <header class="wel-top">
+        <div class="logo">pip<span>!</span></div>
+        <span class="tiny-pill">JUST US TWO ✿</span>
+      </header>
+
+      <div class="welcome-copy">
+        <span class="hello">pssst... you've got a ping!</span>
+        <h1 class="hero-title">
+          small<br>
+          <span>circle.</span>
+          <span class="last">big fun.</span>
+        </h1>
+        <p class="hero-desc">
+          A tiny corner of the internet for random thoughts,
+          silly conversations and everything in between.
+        </p>
+      </div>
+
+      <div class="collage" aria-hidden="true">
+        <div class="shape blob"></div>
+        <div class="shape polaroid">
+          <div class="polaroid-inner">☺</div>
+          <small>good vibes only</small>
+        </div>
+        <div class="sticker smile">☺</div>
+        <div class="sticker hey">NO DRAMA ✳</div>
+        <div class="sticker sparkle">✿</div>
+      </div>
+
+      <div class="welcome-bottom">
+        <button id="startBtn" class="button-main">
+          OPEN OUR LITTLE SPACE
+          <span>↗</span>
+        </button>
+        <p class="welcome-foot">
+          TWO FRIENDS · ONE CHAT · LOTS OF PINGS
+        </p>
+      </div>
+    </section>
+
+    <!-- NAME ENTRY -->
+    <section class="screen gate" id="gate" hidden>
+      <button class="back-link" id="gateBack">← BACK</button>
+
+      <div class="gate-sticker">
+        <div class="envelope">✉</div>
+      </div>
+
+      <span class="section-eyebrow">
+        your invitation is here!
+      </span>
+
+      <h2>HEY,<br><span>WHO'S THIS?</span></h2>
+
+      <p class="muted">
+        Just pick your name to preview the little space.
+      </p>
+
+      <label for="memberInput" class="label">YOUR NAME</label>
+      <input
+        id="memberInput"
+        class="field"
+        placeholder="Ravi or Anushka"
+        maxlength="30"
+        autocomplete="off"
+      >
+
+      <button id="joinBtn" class="button-main">
+        LET ME IN <span>→</span>
+      </button>
+
+      <p id="joinError" class="error" role="alert"></p>
+
+      <p class="fine">
+        Preview only: typing a name is not secure login.
+        Real access will need separate authenticated accounts.
+      </p>
+    </section>
+
+    <!-- APP -->
+    <section class="screen app" id="app" hidden>
+      <header class="app-top">
+        <div>
+          <div class="logo">pip<span>!</span></div>
+          <div class="online-label">
+            <i></i> DESIGN PREVIEW / LOCAL ONLY
+          </div>
+        </div>
+        <span class="person-tag" id="memberTag">
+          FRIEND ✿
+        </span>
+      </header>
+
+      <div class="main-area">
+
+        <!-- CHAT -->
+        <section class="pane active" id="chatPane">
+          <div class="chat-heading">
+            <div class="stack-avatars">
+              <span class="avatar">R</span>
+              <span class="avatar alt">A</span>
+            </div>
+            <div>
+              <h2>the little chat ☺</h2>
+              <p>RAVI + ANUSHKA · TWO FRIENDS</p>
+            </div>
+          </div>
+
+          <div
+            class="chat-scroll"
+            id="chatScroll"
+            role="log"
+            aria-live="polite"
+          >
+            <div class="day-label">A FRESH START ✿</div>
+            <div class="system-message">
+              This is a visual demo. Messages you type
+              stay on this device and won't reach another person.
+            </div>
+          </div>
+
+          <form class="composer" id="chatForm">
+            <input
+              id="chatInput"
+              placeholder="Say something..."
+              autocomplete="off"
+              maxlength="2000"
+              aria-label="Chat message"
+            >
+            <button
+              type="submit"
+              class="send"
+              aria-label="Send local demo message"
+            >➤</button>
+          </form>
+        </section>
+
+        <!-- PINBOARD -->
+        <section class="pane" id="boardPane">
+          <div class="board-scroll">
+            <span class="section-eyebrow">
+              keep the good stuff
+            </span>
+
+            <h2 class="board-title">
+              our little<br><em>pinboard.</em>
+            </h2>
+
+            <p class="board-desc">
+              A messy, colorful corner. Photos and notes
+              shown here are only local previews.
+            </p>
+
+            <article class="paper-card">
+              <h3>tiny photo booth 📸</h3>
+              <p>
+                Pick photos from your phone to preview
+                the layout. Nothing is uploaded.
+              </p>
+
+              <label class="mini-btn" for="photoInput">
+                + ADD PHOTOS
+              </label>
+
+              <input
+                id="photoInput"
+                type="file"
+                accept="image/*"
+                multiple
+                hidden
+              >
+
+              <div class="pic-grid" id="photoGrid">
+                <div class="pic">✿<br>YOUR MOMENTS</div>
+                <div class="pic">☺<br>GO HERE</div>
+              </div>
+            </article>
+
+            <article class="paper-card">
+              <h3>sticky thoughts ✎</h3>
+
+              <textarea
+                id="noteInput"
+                class="note-input"
+                maxlength="400"
+                placeholder="A funny thought, reminder or inside joke..."
+              ></textarea>
+
+              <button
+                id="addNote"
+                class="mini-btn"
+                style="margin-top:10px"
+              >+ STICK IT</button>
+
+              <div class="note-list" id="noteList"></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="pane" id="infoPane">
+          <div class="info-scroll">
+            <span class="info-badge">✳ FRIENDS ONLY</span>
+
+            <h2 class="info-title">
+              little place.<br><em>big energy.</em>
+            </h2>
+
+            <p class="muted">
+              PIP! is a different kind of chat concept:
+              more like a scrapbook, less like
+              a complicated dashboard.
+            </p>
+
+            <ul class="info-list">
+              <li>☺ <strong>Members:</strong> Ravi and Anushka.</li>
+              <li>✿ <strong>Privacy:</strong> No secret monitoring.
+                An administrator may manage the service,
+                but private chats need clear access rules.</li>
+              <li>✎ <strong>Right now:</strong>
+                This is a design demo. Messages and photos
+                are not shared or saved to a server.</li>
+              <li>✧ <strong>Next:</strong> Secure login and
+                real-time chat can be connected separately.</li>
+            </ul>
+
+            <button id="signOut" class="mini-btn">
+              ← LEAVE PREVIEW
+            </button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- NAVIGATION -->
+      <nav class="tabbar" aria-label="Main navigation">
+        <button
+          class="tab active"
+          data-tab="chat"
+          aria-current="page"
+        >
+          <span>☏</span>CHAT
+        </button>
+
+        <button class="tab" data-tab="board">
+          <span>✿</span>PINBOARD
+        </button>
+
+        <button class="tab" data-tab="info">
+          <span>☺</span>ABOUT
+        </button>
+      </nav>
+    </section>
+
+    <div
+      class="toast"
+      id="toast"
+      hidden
+      role="status"
+    ></div>
+  </div>
+
+  <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+
+      const screens = ['welcome', 'gate', 'app'];
+
+      const panes = {
+        chat: $('chatPane'),
+        board: $('boardPane'),
+        info: $('infoPane')
+      };
+
+      let username = '';
+      let toastTimer;
+      let localImages = [];
+
+      function showScreen(id) {
+        screens.forEach(s => {
+          $(s).hidden = s !== id;
+        });
+      }
+
+      function notify(text) {
+        $('toast').textContent = text;
+        $('toast').hidden = false;
+
+        clearTimeout(toastTimer);
+
+        toastTimer = setTimeout(() => {
+          $('toast').hidden = true;
+        }, 2600);
+      }
+
+      $('startBtn').addEventListener('click', () => {
+        showScreen('gate');
+        $('memberInput').focus();
+      });
+
+      $('gateBack').addEventListener('click', () => {
+        showScreen('welcome');
+      });
+
+      function join() {
+        const n = $('memberInput').value.trim().toUpperCase();
+
+        if (!['RAVI', 'ANUSHKA'].includes(n)) {
+          $('joinError').textContent =
+            'Only invited names can enter this preview.';
+          return;
+        }
+
+        username = n;
+        $('memberTag').textContent = n + ' ✿';
+        $('joinError').textContent = '';
+
+        showScreen('app');
+        openTab('chat');
+      }
+
+      $('joinBtn').addEventListener('click', join);
+
+      $('memberInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') join();
+      });
+
+      function openTab(name) {
+        Object.entries(panes).forEach(([key, el]) => {
+          el.classList.toggle('active', key === name);
+        });
+
+        document.querySelectorAll('[data-tab]').forEach(btn => {
+          const active = btn.dataset.tab === name;
+
+          btn.classList.toggle('active', active);
+
+          if (active) {
+            btn.setAttribute('aria-current', 'page');
+          } else {
+            btn.removeAttribute('aria-current');
+          }
+        });
+
+        if (name === 'chat') {
+          requestAnimationFrame(() => {
+            $('chatScroll').scrollTop =
+              $('chatScroll').scrollHeight;
+          });
+        }
+      }
+
+      document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openTab(btn.dataset.tab);
+        });
+      });
+
+      // LOCAL DEMO CHAT
+
+      $('chatForm').addEventListener('submit', e => {
+        e.preventDefault();
+
+        const t = $('chatInput').value.trim();
+        if (!t) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble';
+
+        const who = document.createElement('div');
+        who.className = 'who';
+        who.textContent = username + ' · LOCAL DEMO';
+
+        const msg = document.createElement('div');
+        msg.className = 'body';
+        msg.textContent = t;
+
+        const time = document.createElement('small');
+
+        time.textContent = new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        wrap.append(who, msg, time);
+
+        $('chatScroll').appendChild(wrap);
+        $('chatInput').value = '';
+
+        $('chatScroll').scrollTop =
+          $('chatScroll').scrollHeight;
+      });
+
+      // LOCAL STICKY NOTES
+
+      $('addNote').addEventListener('click', () => {
+        const value = $('noteInput').value.trim();
+
+        if (!value) {
+          return notify('Write something first ✎');
+        }
+
+        const note = document.createElement('div');
+        note.className = 'note';
+        note.textContent = value;
+
+        $('noteList').prepend(note);
+        $('noteInput').value = '';
+
+        notify('Added to this preview ✿');
+      });
+
+      // LOCAL PHOTO PREVIEW
+
+      $('photoInput').addEventListener('change', e => {
+        const files = [...(e.target.files || [])].slice(0, 12);
+
+        for (const file of files) {
+          if (!file.type.startsWith('image/')) continue;
+
+          const url = URL.createObjectURL(file);
+          localImages.push(url);
+
+          const tile = document.createElement('div');
+          tile.className = 'pic';
+
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = 'Local photo preview';
+
+          tile.appendChild(img);
+          $('photoGrid').prepend(tile);
+        }
+
+        e.target.value = '';
+
+        notify('Photos previewed on this device only');
+      });
+
+      $('signOut').addEventListener('click', () => {
+        username = '';
+        $('memberInput').value = '';
+        showScreen('welcome');
+      });
+
+      // MOBILE VIEWPORT / KEYBOARD
+
+      const viewport = () => {
+        document.documentElement.style.setProperty(
+          '--vh',
+          (window.visualViewport?.height || window.innerHeight) + 'px'
+        );
+      };
+
+      window.visualViewport?.addEventListener(
+        'resize',
+        viewport
+      );
+
+      window.addEventListener('resize', viewport);
+      viewport();
+
+      window.addEventListener('pagehide', () => {
+        localImages.forEach(url => URL.revokeObjectURL(url));
+      });
+    })();
+  </script>
+</body>
+</html>
